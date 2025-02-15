@@ -10,7 +10,6 @@
 - [Apache Kafka](https://developer.confluent.io/quickstart/kafka-docker/)
 - [Docker](https://www.docker.com/resources/what-container/)
 - [Docker-compose](https://docs.docker.com/compose/)
-- [Postgres](https://www.postgresql.org/about/)
 - [React](https://ru.reactjs.org/docs/getting-started.html)
 - [GraphQL](https://graphql.org/)
 - [Thymeleaf](https://www.thymeleaf.org/)
@@ -312,7 +311,7 @@ server started
 /usr/local/bin/docker-entrypoint.sh: /docker-entrypoint-initdb.d/init-database.sh: /bin/bash^M: bad interpreter: No such file or directory
 ```
 
-То необходимо выполнить следующие команды в каталоге /postgres :
+То необходимо выполнить следующие команды в каталоге /postgres/script :
 
 ```
 sed -i -e 's/\r$//' init-database.sh
