@@ -10,6 +10,7 @@
 - [Apache Kafka](https://developer.confluent.io/quickstart/kafka-docker/)
 - [Docker](https://www.docker.com/resources/what-container/)
 - [Docker-compose](https://docs.docker.com/compose/)
+- [Postgres](https://www.postgresql.org/about/)
 - [React](https://ru.reactjs.org/docs/getting-started.html)
 - [GraphQL](https://graphql.org/)
 - [Thymeleaf](https://www.thymeleaf.org/)
