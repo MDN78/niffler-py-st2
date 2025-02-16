@@ -1,11 +1,17 @@
+import time
+
 import pytest
 from selene import browser, have, be
 from marks import Pages, TestData
+
+TEST_CATEGORY = "school"
+
 
 # @pytest.mark.skip
 @Pages.main_page
 def test_spending_title_exists():
     browser.element('[id="spendings"]').should(have.text('History of Spendings'))
+
 
 # @pytest.mark.skip
 @Pages.main_page
@@ -27,6 +33,7 @@ def test_registration_new_user(registration_url, app_unregistered_user):
     browser.element('button[type=submit]').click()
     browser.element('.form__paragraph').should(have.text("Congratulations! You've registered!"))
 
+
 # @pytest.mark.skip
 def test_auth_unregistered_user(frontend_url, app_wrong_user):
     username, password = app_wrong_user
@@ -35,6 +42,7 @@ def test_auth_unregistered_user(frontend_url, app_wrong_user):
     browser.element('input[name=password]').set_value(password)
     browser.element('button[type=submit]').click()
     browser.element('.form__error-container').should(have.text('Неверные учетные данные пользователя'))
+
 
 # @pytest.mark.skip
 @Pages.main_page
@@ -47,9 +55,6 @@ def test_create_spends(delete_spend):
     browser.element('#save').click()
     browser.element('//span[.="Add new spending"]').should(be.visible).should(be.clickable)
 
-
-
-TEST_CATEGORY = "school"
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
@@ -110,14 +115,41 @@ def test_edit_spending_currency_EURO(category, spends):
     browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
 
 
+@Pages.main_page
+@TestData.category(TEST_CATEGORY)
+@TestData.spends({
+    "amount": "108.51",
+    "description": "QA.GURU Python Advanced 1",
+    "category": {
+        "name": TEST_CATEGORY
+    },
+    "spendDate": "2024-08-08T18:39:27.955Z",
+    "currency": "RUB"
+})
+def test_edit_spending_currency_KZT(category, spends):
+    browser.element('button[type=button][aria-label="Edit spending"]').click()
+    browser.element('#currency').click()
+    browser.element('//span[.="KZT"]').click()
+    browser.element('#save').click()
+    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
 
 
-
-
-
-
-
-
+@Pages.main_page
+@TestData.category(TEST_CATEGORY)
+@TestData.spends({
+    "amount": "108.51",
+    "description": "QA.GURU Python Advanced 1",
+    "category": {
+        "name": TEST_CATEGORY
+    },
+    "spendDate": "2024-08-08T18:39:27.955Z",
+    "currency": "RUB"
+})
+def test_edit_spending_description(category, spends):
+    browser.element('button[type=button][aria-label="Edit spending"]').click()
+    browser.element('[id="description"]').clear().send_keys("New description")
+    browser.element('#save').click()
+    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
 
 # trash
 # url = 'http://gateway.niffler.dc:8090/api/spends/add'
