@@ -3,6 +3,7 @@ import pytest
 from selene import browser
 from dotenv import load_dotenv
 from clients.spends_client import SpendsHttpClient
+from faker import Faker
 
 
 @pytest.fixture(scope="session")
@@ -31,8 +32,19 @@ def app_user(envs) -> tuple:
 
 
 @pytest.fixture(scope='session')
-def app_unregistered_user(envs) -> tuple:
-    return os.getenv("UNREGISTERED_USER__USERNAME"), os.getenv("UNREGISTERED_USER__PASSWORD")
+def app_unregistered_user() -> tuple:
+    fake = Faker()
+    name = fake.name()
+    password = fake.password(5)
+    return name, password
+
+
+@pytest.fixture(scope='session')
+def app_forbidden_username() -> tuple:
+    fake = Faker()
+    name = 'qw'
+    password = fake.password(5)
+    return name, password
 
 
 @pytest.fixture(scope='session')
