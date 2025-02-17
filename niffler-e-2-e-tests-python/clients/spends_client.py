@@ -42,6 +42,3 @@ class SpendsHttpClient:
         response = self.session.get(urljoin(self.base_url, '/api/spends/all'))
         response.raise_for_status()
         return response.json()
-
-
-
