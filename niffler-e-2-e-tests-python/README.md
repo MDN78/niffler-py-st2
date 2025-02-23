@@ -10,3 +10,5 @@ bash docker-compose-dev.sh
 ```commandline
 pytest
 ```
+
+### Работаем с реляционными базами данных из тестов  
