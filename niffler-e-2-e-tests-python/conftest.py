@@ -3,6 +3,7 @@ import pytest
 from selene import browser
 from dotenv import load_dotenv
 from clients.spends_client import SpendsHttpClient
+from clients.category_client import CategoryHttpClient
 from faker import Faker
 
 
@@ -67,13 +68,18 @@ def spends_client(gateway_url, auth) -> SpendsHttpClient:
     return SpendsHttpClient(gateway_url, auth)
 
 
+@pytest.fixture(scope='session')
+def category_client(gateway_url, auth) -> CategoryHttpClient:
+    return CategoryHttpClient(gateway_url, auth)
+
+
 @pytest.fixture(params=[])
-def category(request, spends_client) -> str:
+def category(request, category_client) -> str:
     category_name = request.param
-    current_categories = spends_client.get_categories()
-    category_names = [category["name"] for category in current_categories]
+    current_categories = category_client.get_categories()
+    category_names = [category.name for category in current_categories]
     if category_name not in category_names:
-        spends_client.add_category(category_name)
+        category_client.add_category(category_name)
     return category_name
 
 
@@ -81,14 +87,15 @@ def category(request, spends_client) -> str:
 def spends(request, spends_client):
     spend = spends_client.add_spends(request.param)
     yield spend
-    spends_client.remove_spends([spend["id"]])
+    spends_client.remove_spends([spend.id])
 
 
 @pytest.fixture()
 def delete_spend(auth, spends_client):
     yield
     response = spends_client.get_spends()
-    spends_client.remove_spends(response[0]["id"])
+    print(response[0].id)
+    spends_client.remove_spends(response[0].id)
 
 
 @pytest.fixture()

@@ -2,6 +2,12 @@ from selene.core import command
 from marks import Pages, TestData
 from selene import browser, have, be
 
+from models.spend import SpendAdd
+from models.category import CategoryAdd
+
+# Spend, Category,
+
+
 TEST_CATEGORY = "school"
 
 
@@ -38,15 +44,15 @@ def test_create_spend_without_category():
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_delete_spending_after_table_action(category, spends):
     browser.element('//span[.="QA.GURU Python Advanced 1"]').should(have.text("QA.GURU Python Advanced 1"))
     browser.element('input[type=checkbox]').click()
@@ -57,15 +63,15 @@ def test_delete_spending_after_table_action(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_currency_USD(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('#currency').click()
@@ -76,15 +82,15 @@ def test_edit_spending_currency_USD(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_currency_EURO(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('#currency').click()
@@ -95,15 +101,15 @@ def test_edit_spending_currency_EURO(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_currency_KZT(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('#currency').click()
@@ -114,15 +120,15 @@ def test_edit_spending_currency_KZT(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_description(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('[id="description"]').clear().send_keys("New description")
@@ -132,15 +138,15 @@ def test_edit_spending_description(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_category(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('[id="category"]').clear().send_keys("transport")
@@ -150,15 +156,15 @@ def test_edit_spending_category(category, spends):
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@TestData.spends(
+    SpendAdd(
+        spendDate="2024-08-08T18:39:27.955Z",
+        category=CategoryAdd(name=TEST_CATEGORY),
+        currency="RUB",
+        amount=108.51,
+        description="QA.GURU Python Advanced 1",
+    )
+)
 def test_edit_spending_date(category, spends):
     browser.element('button[type=button][aria-label="Edit spending"]').click()
     browser.element('[name="date"]').perform(command.js.set_value("02/04/2025"))
