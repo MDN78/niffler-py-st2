@@ -28,3 +28,8 @@ class CategoryHttpClient:
         })
         response.raise_for_status()
         return CategoryAdd.model_validate(response.json())
+
+    # def add_category(self, category: CategoryAdd) -> Category:
+    #     response = self.session.post(urljoin(self.base_url, "/api/categories/add"), json=category.model_dump())
+    #     self.raise_for_status(response)
+    #     return Category.model_validate(response.json())

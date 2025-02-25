@@ -3,12 +3,6 @@ from pydantic import BaseModel
 from models.category import CategoryAdd
 
 
-# class Category(SQLModel, table=True):
-#     id: str = Field(default=None, primary_key=True)
-#     name: str
-#     username: str
-#     archived: True
-#
 # class Spend(SQLModel, table=True):
 #     id: str = Field(default=None, primary_key=True)
 #     spendDate: str

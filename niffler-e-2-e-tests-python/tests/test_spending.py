@@ -5,9 +5,6 @@ from selene import browser, have, be
 from models.spend import SpendAdd
 from models.category import CategoryAdd
 
-# Spend, Category,
-
-
 TEST_CATEGORY = "school"
 
 
