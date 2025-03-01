@@ -1,12 +1,23 @@
 from marks import Pages, TestData
-from selene import browser, have
+from pages.category_page import category_page
+from models.category import CategoryAdd
+import random
+from faker import Faker
 
-TEST_CATEGORY = "vehicle1"
+fake = Faker()
+
+TEST_CATEGORY = fake.word()
+number = random.randint(10, 1000)
 
 
 @Pages.main_page
 @TestData.category(TEST_CATEGORY)
 def test_category_exist(category):
-    browser.element('[data-testid="PersonIcon"]').click()
-    browser.element('//li[.="Profile"]').click()
-    browser.element(f'//span[.="{TEST_CATEGORY}"]').should(have.text(f'{TEST_CATEGORY}'))
+    category_page.category_should_be_exist(TEST_CATEGORY)
+
+# # @Pages.profile
+# @Pages.main_page
+# @TestData.category(TEST_CATEGORY)
+# # @TestData.category(CategoryAdd(name=f"New random {number}"))
+# def test_edit_category_name(category, spend_db):
+#     spend_db.check_category_in_db(category.name)

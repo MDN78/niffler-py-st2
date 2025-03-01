@@ -1,35 +1,29 @@
 import os
+import time
+from urllib.parse import urljoin
 import pytest
 from selene import browser
 from dotenv import load_dotenv
 from clients.spends_client import SpendsHttpClient
 from clients.category_client import CategoryHttpClient
 from faker import Faker
+from pages.spend_page import spend_page
+from databases.spend_db import SpendDb
+from models.category import CategoryAdd
+from models.config import Envs
 
 
 @pytest.fixture(scope="session")
-def envs():
+def envs() -> Envs:
     load_dotenv()
-
-
-@pytest.fixture(scope='session')
-def frontend_url(envs) -> str:
-    return os.getenv("FRONTEND_URL")
-
-
-@pytest.fixture(scope='session')
-def gateway_url(envs) -> str:
-    return os.getenv("GATEWAY_URL")
-
-
-@pytest.fixture(scope='session')
-def registration_url(envs) -> str:
-    return os.getenv("REGISTRATION_URL")
-
-
-@pytest.fixture(scope='session')
-def app_user(envs) -> tuple:
-    return os.getenv("TEST_USERNAME"), os.getenv("TEST_PASSWORD")
+    return Envs(
+        frontend_url=os.getenv("FRONTEND_URL"),
+        gateway_url=os.getenv("GATEWAY_URL"),
+        registration_url=os.getenv("REGISTRATION_URL"),
+        spend_db_url=os.getenv("SPEND_DB_URL"),
+        test_username=os.getenv("TEST_USERNAME"),
+        test_password=os.getenv("TEST_PASSWORD")
+    )
 
 
 @pytest.fixture(scope='session')
@@ -49,55 +43,59 @@ def app_forbidden_username() -> tuple:
 
 
 @pytest.fixture(scope='session')
-def app_wrong_user(envs) -> tuple:
-    return os.getenv("WRONG_USER__USERNAME"), os.getenv("WRONG_USER__PASSWORD")
-
-
-@pytest.fixture(scope='session')
-def auth(frontend_url, app_user) -> str:
-    username, password = app_user
-    browser.open(frontend_url)
-    browser.element('input[name=username]').set_value(username)
-    browser.element('input[name=password]').set_value(password)
+def auth(envs) -> str:
+    browser.open(envs.frontend_url)
+    browser.element('input[name=username]').set_value(envs.test_username)
+    browser.element('input[name=password]').set_value(envs.test_password)
     browser.element('button[type=submit]').click()
     return browser.driver.execute_script('return window.localStorage.getItem("id_token")')
 
 
 @pytest.fixture(scope='session')
-def spends_client(gateway_url, auth) -> SpendsHttpClient:
-    return SpendsHttpClient(gateway_url, auth)
+def spends_client(envs, auth) -> SpendsHttpClient:
+    return SpendsHttpClient(envs.gateway_url, auth)
 
 
 @pytest.fixture(scope='session')
-def category_client(gateway_url, auth) -> CategoryHttpClient:
-    return CategoryHttpClient(gateway_url, auth)
+def category_client(envs, auth) -> CategoryHttpClient:
+    return CategoryHttpClient(envs.gateway_url, auth)
+
+
+@pytest.fixture(scope="session")
+def spend_db(envs) -> SpendDb:
+    return SpendDb(envs.spend_db_url)
 
 
 @pytest.fixture(params=[])
-def category(request, category_client) -> str:
+def category(request, category_client, spend_db):
     category_name = request.param
-    current_categories = category_client.get_categories()
-    category_names = [category.name for category in current_categories]
-    if category_name not in category_names:
-        category_client.add_category(category_name)
-    return category_name
+    category = category_client.add_category(CategoryAdd(name=category_name))
+    yield category.name
+    spend_db.delete_category(category.id)
 
 
 @pytest.fixture(params=[])
 def spends(request, spends_client):
-    spend = spends_client.add_spends(request.param)
-    yield spend
-    spends_client.remove_spends([spend.id])
+    t_spend = spends_client.add_spends(request.param)
+    yield t_spend
+    all_spends = spends_client.get_spends()
+    if t_spend.id in [spend.id for spend in all_spends]:
+        spends_client.remove_spends([t_spend.id])
 
 
 @pytest.fixture()
-def delete_spend(auth, spends_client):
-    yield
-    response = spends_client.get_spends()
-    print(response[0].id)
-    spends_client.remove_spends(response[0].id)
+def delete_spend(request, auth, envs):
+    name_category = request.param
+    yield name_category
+    spend_page.delete_spend(name_category)
 
 
 @pytest.fixture()
-def main_page(auth, frontend_url):
-    browser.open(frontend_url)
+def profile(envs, auth) -> None:
+    profile_url = urljoin(envs.frontend_url, "/profile")
+    browser.open(profile_url)
+
+
+@pytest.fixture()
+def main_page(auth, envs):
+    browser.open(envs.frontend_url)
