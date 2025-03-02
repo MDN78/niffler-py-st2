@@ -75,6 +75,13 @@ def category(request, category_client, spend_db):
 
 
 @pytest.fixture(params=[])
+def category_db(request, category_client, spend_db):
+    category = category_client.add_category(request.param)
+    yield category
+    spend_db.delete_category(category.id)
+
+
+@pytest.fixture(params=[])
 def spends(request, spends_client):
     t_spend = spends_client.add_spends(request.param)
     yield t_spend
@@ -91,7 +98,13 @@ def delete_spend(request, auth, envs):
 
 
 @pytest.fixture()
-def profile(envs, auth) -> None:
+def profile(envs, auth):
+    profile_url = urljoin(envs.frontend_url, "/profile")
+    browser.open(profile_url)
+
+
+@pytest.fixture()
+def profile_page(envs, auth):
     profile_url = urljoin(envs.frontend_url, "/profile")
     browser.open(profile_url)
 

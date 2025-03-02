@@ -25,11 +25,8 @@ class SpendPage(BasePage):
         self.description_field = browser.element('[id="description"]')
         self.description_successful_editing_text = browser.element('//div[.="Spending is edited successfully"]')
         self.spending_tb = browser.element('#spendings tbody .MuiCheckbox-root')
-
-        # browser.element('[id="category"]').clear().send_keys("transport")
-        # browser.element('#save').click()
-        # browser.element('//div[.="Spending is edited successfully"]').should(
-        #     have.text("Spending is edited successfully"))
+        self.set_date = browser.element('[name="date"]')
+        self.spend_label = browser.element('[aria-labelledby="tableTitle"]')
 
     def create_spend(self, amount: int, test_category: str, description: str):
         self.new_spend_button.click()
@@ -71,6 +68,14 @@ class SpendPage(BasePage):
         self.edit_spending.click()
         self.category.clear().send_keys(category)
         self.button_add_spending.click()
+
+    def edit_date(self, date: str):
+        self.edit_spending.click()
+        self.set_date.perform(command.select_all).type(date)
+        self.button_add_spending.click()
+
+    def edited_date_should_be_visible(self, date: str):
+        self.spend_label.should(have.text(date))
 
     def description_should_be_edited(self, message: str):
         self.description_successful_editing_text.should(have.text(message))

@@ -1,7 +1,6 @@
 import pytest
-from selene.core import command
 from marks import Pages, TestData
-from selene import browser, have, be
+from selene import browser
 
 from models.spend import SpendAdd
 from models.category import CategoryAdd
@@ -55,7 +54,6 @@ def test_delete_spending_after_table_action(category, spends):
     spend_page.delete_spend_after_action()
 
 
-# @Pages.main_page
 @pytest.mark.usefixtures("main_page_late")
 @TestData.category(TEST_CATEGORY_2)
 @TestData.spends(
@@ -148,7 +146,5 @@ def test_edit_spending_category(category, spends):
     )
 )
 def test_edit_spending_date(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('[name="date"]').perform(command.js.set_value("02/04/2025"))
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_date("02/02/2025")
+    spend_page.edited_date_should_be_visible('Feb 02, 2025')
