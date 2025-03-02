@@ -28,11 +28,6 @@ class SpendsHttpClient:
         self.raise_for_status(response)
         return [Spend.model_validate(item) for item in response.json()]
 
-    # def get_spends(self) -> list[SpendAdd]:
-    #     response = self.session.get(urljoin(self.base_url, '/api/spends/all'))
-    #     self.raise_for_status(response)
-    #     return [SpendAdd.model_validate(item) for item in response.json()]
-
     def remove_spends(self, ids: list[str]) -> None:
         url = urljoin(self.base_url, "/api/spends/remove")
         response = self.session.delete(url, params={"ids": ids})
