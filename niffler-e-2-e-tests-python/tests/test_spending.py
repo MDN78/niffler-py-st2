@@ -31,7 +31,7 @@ def test_create_spend_without_amount():
 
 @Pages.main_page
 def test_create_spend_without_category():
-    spend_page.create_create_spend_without_category(100, TEST_DESCRIPTION)
+    spend_page.create_spend_without_category(100, TEST_DESCRIPTION)
     spend_page.page_should_have_text('Please choose category')
 
 
