@@ -8,6 +8,8 @@ from pages.spend_page import spend_page
 
 from faker import Faker
 
+pytestmark = [pytest.mark.allure_label("Spendings", label_type="epic")]
+
 fake = Faker()
 
 TEST_CATEGORY = fake.word()

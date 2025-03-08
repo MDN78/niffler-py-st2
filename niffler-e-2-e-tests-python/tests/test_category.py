@@ -4,6 +4,10 @@ from pages.category_page import category_page
 import random
 from faker import Faker
 
+import pytest
+
+pytestmark = [pytest.mark.allure_label("Category", label_type="epic")]
+
 fake = Faker()
 
 TEST_CATEGORY = fake.word()
@@ -14,4 +18,3 @@ number = random.randint(10, 1000)
 @TestData.category(TEST_CATEGORY)
 def test_category_exist(category):
     category_page.category_should_be_exist(TEST_CATEGORY)
-

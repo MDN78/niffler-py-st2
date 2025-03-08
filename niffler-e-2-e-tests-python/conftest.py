@@ -1,6 +1,10 @@
 import os
-import time
 from urllib.parse import urljoin
+from pytest import Item, FixtureDef, FixtureRequest
+from allure_commons.reporter import AllureReporter
+from allure_pytest.listener import AllureListener
+from allure_commons.types import AttachmentType
+import allure
 import pytest
 from selene import browser
 from dotenv import load_dotenv
@@ -11,12 +15,49 @@ from pages.spend_page import spend_page
 from databases.spend_db import SpendDb
 from models.category import CategoryAdd
 from models.config import Envs
+from utils.helper import allure_reporter
+
+
+def allure_logger(config) -> AllureReporter:
+    listener: AllureListener = config.pluginmanager.get_plugin("allure_listener")
+    return listener.allure_logger
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)  # hook call after all fixtures
+def pytest_runtest_call(item: Item):
+    yield
+    allure.dynamic.title(" ".join(item.name.split("_")[1:]).title())
+
+
+@pytest.hookimpl(hookwrapper=True, trylast=True)
+def pytest_fixture_setup(fixturedef: FixtureDef, request: FixtureRequest):
+    yield
+    logger = allure_logger(request.config)
+    item = logger.get_last_item()
+    scope_letter = fixturedef.scope[0].upper()
+    item.name = f"[{scope_letter}] " + " ".join(fixturedef.argname.split("_")).title()
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item):
+    outcome = yield
+    rep = outcome.get_result()
+    # Make result visible in fixtures
+    setattr(item, "rep_" + rep.when, rep)
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_teardown(item):
+    yield
+    reporter = allure_reporter(item.config)
+    test = reporter.get_test(None)
+    test.labels = list(filter(lambda x: x.name not in ("tag"), test.labels))
 
 
 @pytest.fixture(scope="session")
 def envs() -> Envs:
     load_dotenv()
-    return Envs(
+    envs_instance = Envs(
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         registration_url=os.getenv("REGISTRATION_URL"),
@@ -24,6 +65,8 @@ def envs() -> Envs:
         test_username=os.getenv("TEST_USERNAME"),
         test_password=os.getenv("TEST_PASSWORD")
     )
+    allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
+    return envs_instance
 
 
 @pytest.fixture(scope='session')
@@ -48,7 +91,9 @@ def auth(envs) -> str:
     browser.element('input[name=username]').set_value(envs.test_username)
     browser.element('input[name=password]').set_value(envs.test_password)
     browser.element('button[type=submit]').click()
-    return browser.driver.execute_script('return window.localStorage.getItem("id_token")')
+    token = browser.driver.execute_script('return window.localStorage.getItem("id_token")')
+    allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
+    return token
 
 
 @pytest.fixture(scope='session')

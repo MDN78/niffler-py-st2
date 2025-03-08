@@ -7,3 +7,6 @@ faker
 psycopg2-binary==2.9.10
 sqlalchemy==2.0.38
 sqlmodel==0.0.22
+
+allure-pytest==2.13.5
+requests_toolbelt==1.0.0

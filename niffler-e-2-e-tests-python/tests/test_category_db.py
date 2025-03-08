@@ -3,6 +3,9 @@ from models.category import CategoryAdd
 from pages.category_page import category_page
 from utils.helper import check_category_in_db
 from faker import Faker
+import pytest
+
+pytestmark = [pytest.mark.allure_label("Category DB", label_type="epic")]
 
 fake = Faker()
 name = fake.name()

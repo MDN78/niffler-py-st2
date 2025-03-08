@@ -1,5 +1,8 @@
 from marks import Pages
 from pages.auth_page import auth_page
+import pytest
+
+pytestmark = [pytest.mark.allure_label("Authorization", label_type="epic")]
 
 
 @Pages.main_page
