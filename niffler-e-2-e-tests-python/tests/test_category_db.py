@@ -1,4 +1,5 @@
 import os
+
 import pytest
 import random
 from marks import Pages, TestData
@@ -13,6 +14,7 @@ pytestmark = [pytest.mark.allure_label("Category DB", label_type="epic")]
 fake = Faker()
 name = fake.name()
 TEST_CATEGORY = fake.word()
+TEST_CATEGORY_2 = fake.word()
 TEST_DESCRIPTION = fake.word()
 TEST_AMOUNT = random.randint(10, 1000)
 
