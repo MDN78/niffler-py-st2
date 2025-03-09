@@ -23,6 +23,7 @@ class CategoryPage(BasePage):
         self.archived_category = lambda name: browser.all(
             'span.MuiChip-label.MuiChip-labelMedium.css-14vsv3w').element_by(
             have.text(name))
+        self.field_category = browser.element('[id="category"]')
 
     @step
     @allure.step('UI: check text')
@@ -35,6 +36,11 @@ class CategoryPage(BasePage):
     @allure.step('UI: refresh browser')
     def refresh_page() -> None:
         browser.driver.refresh()
+
+    @step
+    @allure.step('UI: create category')
+    def create_category(self, category_name: str):
+        self.field_category.type(category_name).press_enter()
 
     @step
     @allure.step('UI: edit category name')

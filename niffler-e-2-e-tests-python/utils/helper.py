@@ -28,6 +28,14 @@ def check_spend_in_db(spend_db, amount: float, category_name: str, description: 
         assert category_name == category_sql_obj.name
 
 
+def check_category_name_in_db(spend_db, username: str, target_name: str):
+    spends = spend_db.get_user_categories(username)
+    categories = []
+    for category in spends:
+        categories.append(category.name)
+    assert target_name in categories
+
+
 def allure_reporter(config) -> AllureReporter:
     listener: AllureListener = next(
         filter(
