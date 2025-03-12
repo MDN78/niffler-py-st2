@@ -30,7 +30,7 @@ class CategoryHttpClient:
         allure.attach(dump_response(response), attachment_name, attachment_type=AttachmentType.TEXT)
 
     @step
-    @allure.step('HTTP: attach response')
+    @allure.step('HTTP: get categories')
     def get_categories(self) -> list[CategoryAdd]:
         response = self.session.get(urljoin(self.base_url, '/api/categories/all'))
         self.raise_for_status(response)
