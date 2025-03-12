@@ -1,166 +1,150 @@
-from selene.core import command
+import pytest
 from marks import Pages, TestData
-from selene import browser, have, be
+from selene import browser
 
-TEST_CATEGORY = "school"
+from models.spend import SpendAdd
+from models.category import CategoryAdd
+from pages.spend_page import spend_page
+
+from faker import Faker
+
+fake = Faker()
+
+TEST_CATEGORY = fake.word()
+TEST_CATEGORY_2 = fake.country()
+TEST_DESCRIPTION = fake.word()
 
 
 @Pages.main_page
+@Pages.delete_spend(TEST_CATEGORY)
 def test_create_spends(delete_spend):
-    browser.element('//a[.="New spending"]').click()
-    browser.element('.MuiTypography-root.MuiTypography-h5.css-w1t7b3').should(have.text('Add new spending'))
-    browser.element('#amount').set_value('100')
-    browser.element('#category').set_value('school')
-    browser.element('#description').set_value('Add new spending')
-    browser.element('#save').click()
-    browser.element('//span[.="Add new spending"]').should(be.visible).should(be.clickable)
+    spend_page.create_spend(100, TEST_CATEGORY, TEST_DESCRIPTION)
 
 
 @Pages.main_page
 def test_create_spend_without_amount():
-    browser.element('//a[.="New spending"]').click()
-    browser.element('.MuiTypography-root.MuiTypography-h5.css-w1t7b3').should(have.text('Add new spending'))
-    browser.element('#category').set_value('school')
-    browser.element('#description').set_value('Add new spending')
-    browser.element('#save').click()
-    browser.element('[class="input__helper-text"]').should(have.text('Amount has to be not less then 0.01'))
+    spend_page.create_spend_without_amount(TEST_CATEGORY, TEST_DESCRIPTION)
+    spend_page.page_should_have_text('Amount has to be not less then 0.01')
 
 
 @Pages.main_page
 def test_create_spend_without_category():
-    browser.element('//a[.="New spending"]').click()
-    browser.element('.MuiTypography-root.MuiTypography-h5.css-w1t7b3').should(have.text('Add new spending'))
-    browser.element('#amount').set_value('100')
-    browser.element('#description').set_value('Add new spending')
-    browser.element('#save').click()
-    browser.element('[class="input__helper-text"]').should(have.text('Please choose category'))
+    spend_page.create_create_spend_without_category(100, TEST_DESCRIPTION)
+    spend_page.page_should_have_text('Please choose category')
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.fixture()
+def main_page_late(category, spends, envs):
+    browser.open(envs.frontend_url)
+
+
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_delete_spending_after_table_action(category, spends):
-    browser.element('//span[.="QA.GURU Python Advanced 1"]').should(have.text("QA.GURU Python Advanced 1"))
-    browser.element('input[type=checkbox]').click()
-    browser.element('button[id=delete]').click()
-    browser.all('//button[.="Delete"]').second.click()
-    browser.element('//p[.="There are no spendings"]').should(be.visible)
+    spend_page.spending_page_should_have_text("QA.GURU Python Advanced 2")
+    spend_page.delete_spend_after_action()
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_currency_USD(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('#currency').click()
-    browser.element('//span[.="USD"]').click()
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_spending_currency("USD")
+    spend_page.action_should_have_signal_text("Spending is edited successfully")
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_currency_EURO(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('#currency').click()
-    browser.element('//span[.="EUR"]').click()
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_spending_currency("EUR")
+    spend_page.action_should_have_signal_text("Spending is edited successfully")
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_currency_KZT(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('#currency').click()
-    browser.element('//span[.="KZT"]').click()
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_spending_currency("KZT")
+    spend_page.action_should_have_signal_text("Spending is edited successfully")
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_description(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('[id="description"]').clear().send_keys("New description")
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_description('New description')
+    spend_page.description_should_be_edited("Spending is edited successfully")
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_category(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('[id="category"]').clear().send_keys("transport")
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_category('BlockHouse')
+    spend_page.description_should_be_edited("Spending is edited successfully")
 
 
-@Pages.main_page
-@TestData.category(TEST_CATEGORY)
-@TestData.spends({
-    "amount": "108.51",
-    "description": "QA.GURU Python Advanced 1",
-    "category": {
-        "name": TEST_CATEGORY
-    },
-    "spendDate": "2024-08-08T18:39:27.955Z",
-    "currency": "RUB"
-})
+@pytest.mark.usefixtures("main_page_late")
+@TestData.category(TEST_CATEGORY_2)
+@TestData.spends(
+    SpendAdd(
+        amount=108.51,
+        description="QA.GURU Python Advanced 2",
+        category=CategoryAdd(name=TEST_CATEGORY_2),
+        spendDate="2024-08-08T18:39:27.955Z",
+        currency="RUB",
+    )
+)
 def test_edit_spending_date(category, spends):
-    browser.element('button[type=button][aria-label="Edit spending"]').click()
-    browser.element('[name="date"]').perform(command.js.set_value("02/04/2025"))
-    browser.element('#save').click()
-    browser.element('//div[.="Spending is edited successfully"]').should(have.text("Spending is edited successfully"))
+    spend_page.edit_date("02/02/2025")
+    spend_page.edited_date_should_be_visible('Feb 02, 2025')

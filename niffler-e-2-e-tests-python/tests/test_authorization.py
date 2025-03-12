@@ -1,34 +1,26 @@
-from selene import browser, have
 from marks import Pages
+from pages.auth_page import auth_page
 
 
 @Pages.main_page
 def test_spending_title_exists():
-    browser.element('[id="spendings"]').should(have.text('History of Spendings'))
+    auth_page.spending_title_exists('History of Spendings')
 
 
 @Pages.main_page
-def test_spending_button_title_exists():
-    browser.element('[class="MuiBox-root css-11i3wq6"]').should(have.text('There are no spendings'))
+def test_spending_bottom_title_exists():
+    auth_page.spending_bottom_title_exists('There are no spendings')
 
 
-def test_registration_new_user(registration_url, app_unregistered_user):
+def test_registration_new_user(envs, app_unregistered_user):
     username, password = app_unregistered_user
-    browser.open(f'{registration_url}/login')
-    browser.element('[class="form__register"]').click()
-    browser.element('input[name=username]').set_value(username)
-    browser.element('input[name=password]').set_value(password)
-    browser.element('input[name=passwordSubmit]').set_value(password)
-    browser.element('button[type=submit]').click()
-    browser.element('.form__paragraph').should(have.text("Congratulations! You've registered!"))
+    auth_page.open_registration_page(envs.registration_url)
+    auth_page.registration_user(username, password)
+    auth_page.text_should_be_visible("Congratulations! You've registered!")
 
 
-def test_registration_new_user_with_forbidden_name(registration_url, app_forbidden_username):
+def test_registration_new_user_with_forbidden_name(envs, app_forbidden_username):
     username, password = app_forbidden_username
-    browser.open(f'{registration_url}/login')
-    browser.element('[class="form__register"]').click()
-    browser.element('input[name=username]').set_value(username)
-    browser.element('input[name=password]').set_value(password)
-    browser.element('input[name=passwordSubmit]').set_value(password)
-    browser.element('button[type=submit]').click()
-    browser.element('.form__error').should(have.text("Allowed username length should be from 3 to 50 characters"))
+    auth_page.open_registration_page(envs.registration_url)
+    auth_page.registration_user(username, password)
+    auth_page.text_unsuccessful_registration("Allowed username length should be from 3 to 50 characters")
