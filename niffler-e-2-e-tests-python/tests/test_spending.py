@@ -8,6 +8,8 @@ from pages.spend_page import spend_page
 
 from faker import Faker
 
+pytestmark = [pytest.mark.allure_label("Spendings", label_type="epic")]
+
 fake = Faker()
 
 TEST_CATEGORY = fake.word()
@@ -29,7 +31,7 @@ def test_create_spend_without_amount():
 
 @Pages.main_page
 def test_create_spend_without_category():
-    spend_page.create_create_spend_without_category(100, TEST_DESCRIPTION)
+    spend_page.create_spend_without_category(100, TEST_DESCRIPTION)
     spend_page.page_should_have_text('Please choose category')
 
 
