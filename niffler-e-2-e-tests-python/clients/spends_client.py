@@ -29,7 +29,7 @@ class SpendsHttpClient:
 
     @step
     @allure.step('HTTP: add spends')
-    def add_spends(self, spend: SpendAdd) -> Spend:
+    def add_spend(self, spend: SpendAdd) -> Spend:
         url = urljoin(self.base_url, "/api/spends/add")
         response = self.session.post(url, json=spend.model_dump())
         self.raise_for_status(response)
