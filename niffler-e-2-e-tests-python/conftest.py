@@ -8,6 +8,7 @@ import allure
 import pytest
 from selene import browser
 from dotenv import load_dotenv
+from clients.auth_client import AuthClient
 from clients.spends_client import SpendsHttpClient
 from clients.category_client import CategoryHttpClient
 from faker import Faker
@@ -61,6 +62,8 @@ def envs() -> Envs:
         frontend_url=os.getenv("FRONTEND_URL"),
         gateway_url=os.getenv("GATEWAY_URL"),
         registration_url=os.getenv("REGISTRATION_URL"),
+        auth_url=os.getenv("AUTH_URL"),
+        auth_secret=os.getenv("AUTH_SECRET"),
         spend_db_url=os.getenv("SPEND_DB_URL"),
         test_username=os.getenv("TEST_USERNAME"),
         test_password=os.getenv("TEST_PASSWORD")
@@ -92,6 +95,13 @@ def auth(envs: Envs) -> str:
     browser.element('input[name=password]').set_value(envs.test_password)
     browser.element('button[type=submit]').click()
     token = browser.driver.execute_script('return window.localStorage.getItem("id_token")')
+    allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
+    return token
+
+
+@pytest.fixture(scope="session")
+def auth_api_token(envs: Envs):
+    token = AuthClient(envs).auth(envs.test_username, envs.test_password)
     allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
     return token
 
