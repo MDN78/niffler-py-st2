@@ -88,6 +88,7 @@ def app_forbidden_username() -> tuple:
     return name, password
 
 
+# TODO refactoring auth session in tests. Some tests use browser before authorization
 @pytest.fixture(scope='session')
 def auth(envs: Envs) -> str:
     browser.open(envs.frontend_url)

@@ -2,34 +2,16 @@ import base64
 import hashlib
 import os
 import re
-from urllib.parse import urlparse, parse_qs
-
-from requests import Session
 
 from models.config import Envs
-
-
-class AuthSession(Session):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self.code = None
-
-    def request(self, method, url, **kwargs):
-        response = super().request(method, url, **kwargs)
-        for r in response.history:
-            cookies = r.cookies.get_dict()
-            self.cookies.update(cookies)
-            code = parse_qs(urlparse(r.headers.get("Location")).query).get("code", None)
-            if code:
-                self.code = code
-
-        return response
+from utils.sessions import AuthSession
 
 
 class AuthClient:
     def __init__(self, env: Envs):
         self.session = AuthSession()
-        self.domain_url = env.auth_url
+        # self.domain_url = env.auth_url
+        self.domain_url = env.registration_url
         self.code_verifier = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8')
         self.code_verifier = re.sub('[^a-zA-Z0-9]+', '', self.code_verifier)
 
@@ -37,8 +19,9 @@ class AuthClient:
         self.code_challenge = base64.urlsafe_b64encode(self.code_challenge).decode('utf-8')
         self.code_challenge = self.code_challenge.replace('=', '')
 
-        self._basic_token = base64.b64encode(env.auth_secret.encode('utf-8')).decode('utf-8')
-        self.authorization_basic = {"Authorization": f"Basic {self._basic_token}"}
+        # in new version Niffler can't use this statements
+        # self._basic_token = base64.b64encode(env.auth_secret.encode('utf-8')).decode('utf-8')
+        # self.authorization_basic = {"Authorization": f"Basic {self._basic_token}"}
         self.token = None
 
     def auth(self, username, password):
