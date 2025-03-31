@@ -65,6 +65,7 @@ def envs() -> Envs:
         spend_db_url=os.getenv("SPEND_DB_URL"),
         test_username=os.getenv("TEST_USERNAME"),
         test_password=os.getenv("TEST_PASSWORD")
+        # auth_secret=os.getenv("AUTH_SECRET")
     )
     allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
     return envs_instance

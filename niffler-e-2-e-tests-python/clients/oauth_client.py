@@ -1,8 +1,11 @@
 import pkce
+# import hashlib
+# import re
+# import os
 from models.config import Envs
 from models.oauth import OAuthRequest
 from utils.sessions import AuthSession
-
+# import base64
 
 class OAuthClient:
     """Авторизует по Oauth2.0"""
@@ -21,6 +24,9 @@ class OAuthClient:
         # self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).digest()
         # self.code_challenge = base64.urlsafe_b64encode(self.code_challenge).decode('utf-8')
         # self.code_challenge = self.code_challenge.replace('=', '')
+        # self._basic_token = base64.b64encode(env.auth_secret.encode('utf-8')).decode('utf-8')
+        # self.authorization_basic = {"Authorization": f"Basic {self._basic_token}"}
+
         self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
         self.token = None
 
@@ -30,6 +36,7 @@ class OAuthClient:
         2. Получаем code из redirec по xsrf-token'у.
         3. Получаем access_token.
         """
+
         self.session.get(
             url=f"/oauth2/authorize",
             params=OAuthRequest(
@@ -58,7 +65,8 @@ class OAuthClient:
                 "code_verifier": self.code_verifier,
                 "grant_type": "authorization_code",
                 "client_id": "client"
-            },
+            }
+            # headers=self.authorization_basic,
         )
 
         self.token = token_response.json().get("access_token", None)

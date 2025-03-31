@@ -25,6 +25,8 @@ class AuthSession(Session):
         """
         super().__init__()
         self.base_url = kwargs.pop("base_url", "")
+        # self.base_url = "http://auth.niffler.dc:9000"
+
         self.code = None
 
     # @allure_attach_request
