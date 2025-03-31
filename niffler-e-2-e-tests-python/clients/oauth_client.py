@@ -24,7 +24,7 @@ class OAuthClient:
         self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
         self.token = None
 
-    def auth_token(self, username, password):
+    def get_token(self, username, password):
         """Возвращает token oauth для авторизации пользователя с username и password
         1. Получаем jsessionid и xsrf-token куку в сессию.
         2. Получаем code из redirec по xsrf-token'у.
