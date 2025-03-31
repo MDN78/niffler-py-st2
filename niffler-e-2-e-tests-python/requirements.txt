@@ -12,3 +12,4 @@ allure-pytest==2.13.5
 requests_toolbelt==1.0.0
 
 curlify==2.2.1
+pkce==1.0.3
