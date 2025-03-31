@@ -5,7 +5,7 @@ from utils.sessions import AuthSession
 
 
 class OAuthClient:
-    """Авториизует по Oauth2.0"""
+    """Авторизует по Oauth2.0"""
     session: AuthSession
     base_url: str
 
