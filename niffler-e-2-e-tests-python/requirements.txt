@@ -10,3 +10,4 @@ sqlmodel==0.0.22
 
 allure-pytest==2.13.5
 requests_toolbelt==1.0.0
+pkce==1.0.3
