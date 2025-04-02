@@ -16,6 +16,9 @@ class AuthSession(Session):
         self.code = None
 
     def request(self, method, url, **kwargs):
+        """Сохраняем все cookies из redirect'a и сохраняем code авторизации из redirect_uri,
+        И используем в дальнейшем в последующих запросах этой сессии."""
+
         response = super().request(method, url, **kwargs)
         for r in response.history:
             cookies = r.cookies.get_dict()
