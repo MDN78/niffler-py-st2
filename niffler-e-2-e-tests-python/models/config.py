@@ -7,5 +7,5 @@ class Envs(BaseModel):
     spend_db_url: str
     test_username: str
     test_password: str
-    auth_url: str
-    auth_secret: str
+    # auth_url: str
+    # auth_secret: str

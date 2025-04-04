@@ -1,33 +1,9 @@
-import base64
-import hashlib
-import os
-import re
+# import base64
 import pkce
-from urllib.parse import urlparse, parse_qs
-
-from requests import Session
 
 from models.config import Envs
-
-
-class AuthSession(Session):
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-        self.code = None
-
-    def request(self, method, url, **kwargs):
-        """Сохраняем все cookies из redirect'a и сохраняем code авторизации из redirect_uri,
-        И используем в дальнейшем в последующих запросах этой сессии."""
-
-        response = super().request(method, url, **kwargs)
-        for r in response.history:
-            cookies = r.cookies.get_dict()
-            self.cookies.update(cookies)
-            code = parse_qs(urlparse(r.headers.get("Location")).query).get("code", None)
-            if code:
-                self.code = code
-
-        return response
+from utils.sessions import AuthSession
+from models.oauth import OAuthRequest
 
 
 class AuthClient:
@@ -36,7 +12,8 @@ class AuthClient:
     def __init__(self, env: Envs):
         """Генерируем code_verifier и code_challenge. И генерируем basic auth token из секрета сервиса авторизации."""
         self.session = AuthSession()
-        self.domain_url = env.auth_url
+        self.domain_url = env.registration_url
+        self.redirect_uri = env.frontend_url + "/authorized"
 
         # Этот код мы написали самостоятельно и заменили на целевую схему с использованием библиотеки
         # self.code_verifier = base64.urlsafe_b64encode(os.urandom(32)).decode('utf-8')
@@ -45,9 +22,8 @@ class AuthClient:
         # self.code_challenge = hashlib.sha256(self.code_verifier.encode('utf-8')).digest()
         # self.code_challenge = base64.urlsafe_b64encode(self.code_challenge).decode('utf-8')
         # self.code_challenge = self.code_challenge.replace('=', '')
-
-        self._basic_token = base64.b64encode(env.auth_secret.encode('utf-8')).decode('utf-8')
-        self.authorization_basic = {"Authorization": f"Basic {self._basic_token}"}
+        # self._basic_token = base64.b64encode(env.auth_secret.encode('utf-8')).decode('utf-8')
+        # self.authorization_basic = {"Authorization": f"Basic {self._basic_token}"}
 
         self.code_verifier, self.code_challenge = pkce.generate_pkce_pair()
         self.token = None
@@ -62,14 +38,10 @@ class AuthClient:
 
         session.get(
             url=f"{self.domain_url}/oauth2/authorize",
-            params={
-                "response_type": "code",
-                "client_id": "client",
-                "scope": "openid",
-                "redirect_uri": "http://frontend.niffler.dc/authorized",
-                "code_challenge": self.code_challenge,
-                "code_challenge_method": "S256",
-            },
+            params=OAuthRequest(
+                redirect_uri=self.redirect_uri,
+                code_challenge=self.code_challenge
+            ).model_dump(),
             allow_redirects=True
         )
 
@@ -87,12 +59,11 @@ class AuthClient:
             url=f"{self.domain_url}/oauth2/token",
             data={
                 "code": session.code,
-                "redirect_uri": "http://frontend.niffler.dc/authorized",
+                "redirect_uri": self.redirect_uri,
                 "code_verifier": self.code_verifier,
                 "grant_type": "authorization_code",
                 "client_id": "client"
             },
-            # headers=self.authorization_basic,
         )
 
         self.token = token_response.json().get("access_token", None)
