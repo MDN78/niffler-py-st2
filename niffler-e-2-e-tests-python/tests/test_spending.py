@@ -5,6 +5,7 @@ from selene import browser
 from models.spend import SpendAdd
 from models.category import CategoryAdd
 from pages.spend_page import spend_page
+from models.enums import Information, Category
 
 from faker import Faker
 
@@ -14,24 +15,23 @@ fake = Faker()
 
 TEST_CATEGORY = fake.word()
 TEST_CATEGORY_2 = fake.country()
-TEST_DESCRIPTION = fake.word()
-
+# TEST_DESCRIPTION = fake.word()
 
 @Pages.main_page
-@Pages.delete_spend(TEST_CATEGORY)
+@Pages.delete_spend(Category.TEST_CATEGORY1)
 def test_create_spends(delete_spend):
-    spend_page.create_spend(100, TEST_CATEGORY, TEST_DESCRIPTION)
+    spend_page.create_spend(100, Category.TEST_CATEGORY1, Information.DESCRIPTION)
 
 
 @Pages.main_page
 def test_create_spend_without_amount():
-    spend_page.create_spend_without_amount(TEST_CATEGORY, TEST_DESCRIPTION)
+    spend_page.create_spend_without_amount(Category.TEST_CATEGORY1, Information.DESCRIPTION)
     spend_page.page_should_have_text('Amount has to be not less then 0.01')
 
 
 @Pages.main_page
 def test_create_spend_without_category():
-    spend_page.create_spend_without_category(100, TEST_DESCRIPTION)
+    spend_page.create_spend_without_category(100, Information.DESCRIPTION)
     spend_page.page_should_have_text('Please choose category')
 
 

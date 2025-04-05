@@ -1,20 +1,13 @@
 from marks import Pages, TestData
 from pages.category_page import category_page
 
-import random
-from faker import Faker
-
 import pytest
+from models.enums import Category
 
 pytestmark = [pytest.mark.allure_label("Category", label_type="epic")]
 
-fake = Faker()
-
-TEST_CATEGORY = fake.word()
-number = random.randint(10, 1000)
-
 
 @Pages.main_page
-@TestData.category(TEST_CATEGORY)
+@TestData.category(Category.TEST_CATEGORY1)
 def test_category_exist(category):
-    category_page.category_should_be_exist(TEST_CATEGORY)
+    category_page.category_should_be_exist(Category.TEST_CATEGORY1)

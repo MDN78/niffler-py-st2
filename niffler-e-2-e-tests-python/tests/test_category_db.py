@@ -1,28 +1,19 @@
 import os
-import time
 
 import pytest
-import random
 from marks import Pages, TestData
 from models.category import CategoryAdd
 from pages.category_page import category_page
 from pages.spend_page import spend_page
 from utils.helper import check_category_in_db, check_spend_in_db, check_category_name_in_db
-from faker import Faker
+from models.enums import Information, Category
 
 pytestmark = [pytest.mark.allure_label("Category DB", label_type="epic")]
-
-fake = Faker()
-name = fake.name()
-TEST_CATEGORY = fake.word()
-TEST_CATEGORY_2 = fake.word()
-TEST_DESCRIPTION = fake.word()
-TEST_AMOUNT = random.randint(10, 1000)
 
 
 @Pages.profile_page
 @TestData.category_db(CategoryAdd(
-    name=f"Test category name {name}"
+    name=f"Test category name {Information.NAME}"
 ))
 def test_edit_name_category(category_db, spend_db) -> None:
     check_category_in_db(
@@ -41,7 +32,7 @@ def test_edit_name_category(category_db, spend_db) -> None:
 
 @Pages.profile_page
 @TestData.category_db(CategoryAdd(
-    name=f"Test category name {name}"
+    name=f"Test category name {Information.NAME}"
 ))
 def test_archived_category(category_db, spend_db) -> None:
     check_category_in_db(
@@ -58,14 +49,14 @@ def test_archived_category(category_db, spend_db) -> None:
 @Pages.main_page
 def test_created_spend_exist_in_database(spend_db):
     user_name = os.getenv("TEST_USERNAME")
-    spend_page.create_spend(TEST_AMOUNT, TEST_CATEGORY, TEST_DESCRIPTION)
-    check_spend_in_db(spend_db, TEST_AMOUNT, TEST_CATEGORY, TEST_DESCRIPTION, user_name)
-    spend_page.delete_spend(TEST_CATEGORY)
+    spend_page.create_spend(Information.AMOUNT, Category.TEST_CATEGORY1, Information.DESCRIPTION)
+    check_spend_in_db(spend_db, Information.AMOUNT, Category.TEST_CATEGORY1, Information.DESCRIPTION, user_name)
+    spend_page.delete_spend(Category.TEST_CATEGORY1)
 
 
 @Pages.profile_page
 def test_check_category_name_changes_in_database(spend_db):
     user_name = os.getenv("TEST_USERNAME")
-    category_page.create_category(TEST_CATEGORY_2)
+    category_page.create_category(Category.TEST_CATEGORY2)
     category_page.refresh_page()
-    check_category_name_in_db(spend_db, user_name, TEST_CATEGORY_2)
+    check_category_name_in_db(spend_db, user_name, Category.TEST_CATEGORY2)

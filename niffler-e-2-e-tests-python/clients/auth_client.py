@@ -8,6 +8,8 @@ from models.oauth import OAuthRequest
 
 class AuthClient:
     """Авторизует по Oauth2.0"""
+    session: AuthSession
+    base_url: str
 
     def __init__(self, env: Envs):
         """Генерируем code_verifier и code_challenge. И генерируем basic auth token из секрета сервиса авторизации."""
