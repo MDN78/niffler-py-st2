@@ -13,8 +13,7 @@ class AuthClient:
 
     def __init__(self, env: Envs):
         """Генерируем code_verifier и code_challenge. И генерируем basic auth token из секрета сервиса авторизации."""
-        self.session = AuthSession()
-        self.domain_url = env.registration_url
+        self.session = AuthSession(base_url=env.registration_url)
         self.redirect_uri = env.frontend_url + "/authorized"
 
         # Этот код мы написали самостоятельно и заменили на целевую схему с использованием библиотеки
@@ -36,10 +35,9 @@ class AuthClient:
         2. Получаем code из redirec по xsrf-token'у.
         3. Получаем access_token.
         """
-        session = AuthSession()
 
-        session.get(
-            url=f"{self.domain_url}/oauth2/authorize",
+        self.session.get(
+            url="/oauth2/authorize",
             params=OAuthRequest(
                 redirect_uri=self.redirect_uri,
                 code_challenge=self.code_challenge
@@ -47,20 +45,20 @@ class AuthClient:
             allow_redirects=True
         )
 
-        session.post(
-            url=f"{self.domain_url}/login",
+        self.session.post(
+            url="/login",
             data={
                 "username": username,
                 "password": password,
-                "_csrf": session.cookies.get("XSRF-TOKEN")
+                "_csrf": self.session.cookies.get("XSRF-TOKEN")
             },
             allow_redirects=True
         )
 
-        token_response = session.post(
-            url=f"{self.domain_url}/oauth2/token",
+        token_response = self.session.post(
+            url="/oauth2/token",
             data={
-                "code": session.code,
+                "code": self.session.code,
                 "redirect_uri": self.redirect_uri,
                 "code_verifier": self.code_verifier,
                 "grant_type": "authorization_code",

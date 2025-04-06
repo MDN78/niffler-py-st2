@@ -9,6 +9,10 @@ fake = Faker()
 class Category:
     TEST_CATEGORY1 = fake.word()
     TEST_CATEGORY2 = fake.word()
+    TEST_CATEGORY3 = fake.word()
+    TEST_CATEGORY4 = fake.word()
+
+
 
 
 @dataclass
