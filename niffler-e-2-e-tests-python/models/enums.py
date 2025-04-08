@@ -11,8 +11,12 @@ class Category:
     TEST_CATEGORY2 = fake.word()
     TEST_CATEGORY3 = fake.word()
     TEST_CATEGORY4 = fake.word()
+    TEST_CATEGORY5 = fake.word()
 
 
+@dataclass
+class Spend:
+    TEST_SPEND1 = fake.word()
 
 
 @dataclass

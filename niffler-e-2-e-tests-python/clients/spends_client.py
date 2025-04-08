@@ -9,6 +9,7 @@ from models.spend import SpendAdd, Spend
 from requests_toolbelt.utils.dump import dump_response
 from utils.helper import step
 
+
 class SpendsHttpClient:
     session: requests.Session
     base_url: str
@@ -23,6 +24,7 @@ class SpendsHttpClient:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         })
+
     #     self.session.hooks["response"].append(self.attach_response)
     #
     # @staticmethod
@@ -57,6 +59,13 @@ class SpendsHttpClient:
         # url = urljoin(self.base_url, "/api/spends/remove")
         # response = self.session.delete(url, params={"ids": ids})
         # self.raise_for_status(response)
+
+    @step
+    @allure.step('HTTP: update spends')
+    def update_spend(self, update: Spend) -> Spend:
+        response = self.session.patch("/api/spends/edit", data=update.model_dump_json())
+        response.raise_for_status()
+        return Spend.model_validate(response.json())
 
     # @staticmethod
     # def raise_for_status(response: requests.Response):

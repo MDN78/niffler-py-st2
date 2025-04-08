@@ -15,6 +15,8 @@ fake = Faker()
 
 TEST_CATEGORY = fake.word()
 TEST_CATEGORY_2 = fake.country()
+
+
 # TEST_DESCRIPTION = fake.word()
 
 @Pages.main_page

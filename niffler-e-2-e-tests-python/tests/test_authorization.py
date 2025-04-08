@@ -1,3 +1,5 @@
+import time
+
 from marks import Pages
 from pages.auth_page import auth_page
 import pytest
