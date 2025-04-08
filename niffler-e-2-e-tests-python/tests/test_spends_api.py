@@ -1,5 +1,4 @@
 import pytest
-
 from clients.spends_client import SpendsHttpClient
 from fixtures.auth_fixtures import auth_api_token
 from models.category import CategoryAdd

@@ -22,6 +22,7 @@ class SpendAdd(BaseModel):
     spendDate: str
     currency: str
 
+
 class SpendSQL(SQLModel, table=True):
     __tablename__ = 'spend'
     id: str | None = Field(default=None, primary_key=True)

@@ -18,18 +18,3 @@ def spend_db(envs: Envs) -> SpendDb:
 @pytest.fixture(scope='session')
 def category_client(envs: Envs, auth_api_token: str) -> CategoryHttpClient:
     return CategoryHttpClient(envs, auth_api_token)
-
-
-# @pytest.fixture(scope='session')
-# def spends_client(envs: Envs, auth: str) -> SpendsHttpClient:
-#     return SpendsHttpClient(envs, auth)
-#
-#
-# @pytest.fixture(scope="session")
-# def spend_db(envs: Envs) -> SpendDb:
-#     return SpendDb(envs)
-#
-#
-# @pytest.fixture(scope='session')
-# def category_client(envs: Envs, auth: str) -> CategoryHttpClient:
-#     return CategoryHttpClient(envs, auth)

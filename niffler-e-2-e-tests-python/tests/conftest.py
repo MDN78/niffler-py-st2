@@ -1,7 +1,6 @@
 import pytest
 from models.config import Envs
 from pages.spend_page import spend_page
-# from clients.auth_client import AuthClient
 from clients.spends_client import SpendsHttpClient
 from clients.category_client import CategoryHttpClient
 from databases.spend_db import SpendDb
@@ -12,7 +11,6 @@ from _pytest.fixtures import FixtureRequest
 @pytest.fixture(params=[])
 def category(request: FixtureRequest, category_client: CategoryHttpClient, spend_db: SpendDb):
     category_name = request.param
-    # category = category_client.add_category(category_name)
     category = category_client.add_category((CategoryAdd(name=category_name)))
     yield category.name
     spend_db.delete_category(category.id)

@@ -17,8 +17,6 @@ TEST_CATEGORY = fake.word()
 TEST_CATEGORY_2 = fake.country()
 
 
-# TEST_DESCRIPTION = fake.word()
-
 @Pages.main_page
 @Pages.delete_spend(Category.TEST_CATEGORY1)
 def test_create_spends(delete_spend):

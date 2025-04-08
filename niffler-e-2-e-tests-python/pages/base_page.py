@@ -2,6 +2,7 @@ from selene import browser
 from utils.helper import step
 import allure
 
+
 class BasePage:
 
     @step
