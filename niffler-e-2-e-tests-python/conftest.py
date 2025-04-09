@@ -1,5 +1,4 @@
 import os
-# from urllib.parse import urljoin
 from pytest import Item, FixtureDef, FixtureRequest
 from allure_commons.reporter import AllureReporter
 from allure_pytest.listener import AllureListener
@@ -69,7 +68,7 @@ def envs() -> Envs:
 def app_unregistered_user() -> tuple:
     fake = Faker()
     name = fake.name()
-    password = fake.password(5)
+    password = fake.password(6)
     return name, password
 
 

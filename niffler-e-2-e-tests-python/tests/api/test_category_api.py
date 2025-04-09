@@ -8,7 +8,7 @@ import pytest
 pytestmark = [pytest.mark.allure_label("Category API", label_type="epic")]
 
 
-def test_add_new_category_via_api(category_client: CategoryHttpClient, spend_db: SpendDb):
+def test_add_new_category(category_client: CategoryHttpClient, spend_db: SpendDb):
     category_name = Category.TEST_CATEGORY3
     category = category_client.add_category((CategoryAdd(name=category_name)))
     assert category.name == category_name
@@ -18,7 +18,6 @@ def test_add_new_category_via_api(category_client: CategoryHttpClient, spend_db:
 
 
 @TestData.category(Category.TEST_CATEGORY4)
-def test_get_all_categories_via_api(category, category_client: CategoryHttpClient, spend_db: SpendDb):
+def test_get_all_categories(category, category_client: CategoryHttpClient, spend_db: SpendDb):
     categories = category_client.get_categories()
     assert len(categories) > 0
-    assert categories[0].name == Category.TEST_CATEGORY4

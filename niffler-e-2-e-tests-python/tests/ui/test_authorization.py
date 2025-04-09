@@ -17,6 +17,7 @@ def test_spending_bottom_title_exists():
     auth_page.spending_bottom_title_exists('There are no spendings')
 
 
+# @pytest.mark.skip
 def test_registration_new_user(envs, app_unregistered_user):
     username, password = app_unregistered_user
     auth_page.open_registration_page(envs.registration_url)

@@ -12,6 +12,7 @@ class Category:
     TEST_CATEGORY3 = fake.word()
     TEST_CATEGORY4 = fake.word()
     TEST_CATEGORY5 = fake.word()
+    TEST_CATEGORY6 = fake.country()
 
 
 @dataclass
