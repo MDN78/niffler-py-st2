@@ -37,26 +37,3 @@ def delete_spend(request: FixtureRequest, auth: str, envs: Envs):
     name_category = request.param
     yield name_category
     spend_page.delete_spend(name_category)
-
-# from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
-# from selene import browser
-#
-# @pytest.fixture(scope="session", autouse=True)
-# def driver_configuration(request):
-#     chrome_options = Options()
-#     # Отключаем уведомления об утечке паролей
-#     chrome_options.add_argument("--password-store=basic")
-#     chrome_options.add_experimental_option("prefs", {
-#         "credentials_enable_service": False,
-#         "profile.password_manager_enabled": False,
-#         "profile.default_content_setting_values.notifications": 2
-#     })
-#
-#     # Дополнительные настройки для отключения предупреждений chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"]) chrome_options.add_experimental_option("useAutomationExtension", False)
-#
-#     driver = webdriver.Chrome(options=chrome_options)
-#     browser.config.driver = driver
-#     yield
-#     browser.quit()
-
