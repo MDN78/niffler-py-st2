@@ -67,8 +67,8 @@ def envs() -> Envs:
 @pytest.fixture(scope='session')
 def app_unregistered_user() -> tuple:
     fake = Faker()
-    name = fake.name()
-    password = fake.password(6)
+    name = "test" + fake.name()
+    password = fake.password(8)
     return name, password
 
 
