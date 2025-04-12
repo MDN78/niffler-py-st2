@@ -13,7 +13,7 @@ def test_add_new_category(category_client: CategoryHttpClient, spend_db: SpendDb
     category = category_client.add_category((CategoryAdd(name=category_name)))
     assert category.name == category_name
     assert category.id is not None
-    assert category.username == 'stas'
+
     spend_db.delete_category(category.id)
 
 

@@ -40,6 +40,7 @@ class SpendsHttpClient:
         # url = urljoin(self.base_url, "/api/spends/add")
         # response = self.session.post(url, json=spend.model_dump())
         # self.raise_for_status(response)
+        assert response.status_code == 201
         return Spend.model_validate(response.json())
 
     @step
@@ -65,6 +66,7 @@ class SpendsHttpClient:
     def update_spend(self, update: Spend) -> Spend:
         response = self.session.patch("/api/spends/edit", data=update.model_dump_json())
         response.raise_for_status()
+        assert response.status_code == 200
         return Spend.model_validate(response.json())
 
     # @staticmethod
