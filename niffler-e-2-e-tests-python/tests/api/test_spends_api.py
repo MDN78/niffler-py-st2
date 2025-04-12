@@ -12,9 +12,9 @@ from marks import TestData
 pytestmark = [pytest.mark.allure_label("Spends API", label_type="epic")]
 
 
-# @pytest.mark.skip
-# def test_auth(auth_api_token):
-#     print(auth_api_token)
+def test_auth_token_fixture(auth_api_token):
+    assert auth_api_token is not None
+    # print(auth_api_token)
 
 
 def test_add_spend(spends_client: SpendsHttpClient, spend_db: SpendDb):
