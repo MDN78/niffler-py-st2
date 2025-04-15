@@ -1,6 +1,6 @@
 from pages.base_page import BasePage
 from selene import browser, have, be, command
-from utils.helper import step
+# from utils.helper import step
 import allure
 
 
@@ -30,7 +30,7 @@ class SpendPage(BasePage):
         self.set_date = browser.element('[name="date"]')
         self.spend_label = browser.element('[aria-labelledby="tableTitle"]')
 
-    @step
+    # @step
     @allure.step('UI: Create spend')
     def create_spend(self, amount: int, test_category: str, description: str):
         self.new_spend_button.click()
@@ -40,7 +40,7 @@ class SpendPage(BasePage):
         self.description.set_value(f'{description}')
         self.button_add_spending.click()
 
-    @step
+    # @step
     @allure.step('UI: create spend without amount')
     def create_spend_without_amount(self, test_category: str, description: str):
         self.new_spend_button.click()
@@ -49,12 +49,12 @@ class SpendPage(BasePage):
         self.description.set_value(f'{description}')
         self.button_add_spending.click()
 
-    @step
+    # @step
     @allure.step('UI: check text')
     def page_should_have_text(self, text: str):
         self.text_attention.should(have.text(text))
 
-    @step
+    # @step
     @allure.step('UI: create spend without category')
     def create_spend_without_category(self, amount: int, description: str):
         self.new_spend_button.click()
@@ -63,14 +63,14 @@ class SpendPage(BasePage):
         self.description.set_value(f'{description}')
         self.button_add_spending.click()
 
-    @step
+    # @step
     @allure.step('UI: edit description')
     def edit_description(self, description: str):
         self.edit_spending.click()
         self.description_field.clear().send_keys(description)
         self.button_save.click()
 
-    @step
+    # @step
     @allure.step('UI: edit spending currency')
     def edit_spending_currency(self, currency: str):
         self.edit_spending.click()
@@ -78,41 +78,41 @@ class SpendPage(BasePage):
         self.select_currency(currency).click()
         self.button_save.click()
 
-    @step
+    # @step
     @allure.step('UI: edit category')
     def edit_category(self, category: str):
         self.edit_spending.click()
         self.category.clear().send_keys(category)
         self.button_add_spending.click()
 
-    @step
+    # @step
     @allure.step('UI: edit date')
     def edit_date(self, date: str):
         self.edit_spending.click()
         self.set_date.perform(command.select_all).type(date)
         self.button_add_spending.click()
 
-    @step
+    # @step
     @allure.step('UI: check date')
     def edited_date_should_be_visible(self, date: str):
         self.spend_label.should(have.text(date))
 
-    @step
+    # @step
     @allure.step('UI: check edited text')
     def description_should_be_edited(self, message: str):
         self.description_successful_editing_text.should(have.text(message))
 
-    @step
+    # @step
     @allure.step('UI: check signal text')
     def action_should_have_signal_text(self, text: str):
         self.successful_change.should(have.text(text))
 
-    @step
+    # @step
     @allure.step('UI: check text')
     def spending_page_should_have_text(self, description: str):
         self.spending_body.should(have.text(description))
 
-    @step
+    # @step
     @allure.step('UI: delete spend after adding')
     def delete_spend_after_action(self):
         self.spending_tb.perform(command.js.scroll_into_view).click()
@@ -120,7 +120,7 @@ class SpendPage(BasePage):
         self.delete_button_approve.click()
         self.spending.should(have.text("There are no spendings"))
 
-    @step
+    # @step
     @allure.step('UI: delete spend')
     def delete_spend(self, name_category: str):
         self.category_name(name_category).click()

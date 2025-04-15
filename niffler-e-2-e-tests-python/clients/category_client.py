@@ -6,7 +6,7 @@ from models.config import Envs
 from models.category import Category, CategoryAdd
 # from allure_commons.types import AttachmentType
 # from requests_toolbelt.utils.dump import dump_response
-from utils.helper import step
+# from utils.helper import step
 
 
 
@@ -30,14 +30,14 @@ class CategoryHttpClient:
     #     attachment_name = response.request.method + " " + response.request.url
     #     allure.attach(dump_response(response), attachment_name, attachment_type=AttachmentType.TEXT)
 
-    @step
+    # @step
     @allure.step('HTTP: get categories')
     def get_categories(self) -> list[CategoryAdd]:
         response = self.session.get("/api/categories/all")
         # self.raise_for_status(response)
         return [CategoryAdd.model_validate(item) for item in response.json()]
 
-    @step
+    # @step
     @allure.step('HTTP: add category')
     def add_category(self, category: CategoryAdd) -> Category:
         response = self.session.post("/api/categories/add", json=category.model_dump())
