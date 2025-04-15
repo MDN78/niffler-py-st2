@@ -1,6 +1,6 @@
 import requests
 from urllib.parse import parse_qs, urlparse
-# from utils.allure_helper import allure_attach_request
+from utils.allure_helper import allure_attach_request
 from requests import Session
 from utils.helper import step
 
