@@ -25,7 +25,8 @@ def allure_attach_request(function):
             logging.debug(response.text)
 
             allure.attach(
-                body=curlify.to_curl(curl).encode("utf8"),
+                # body=curlify.to_curl(curl).encode("utf-8"),
+                body=curl.encode('utf8'),
                 name=f"Request {response.status_code}",
                 attachment_type=AttachmentType.TEXT,
                 extension=".txt"
@@ -44,7 +45,7 @@ def allure_attach_request(function):
                     attachment_type=AttachmentType.TEXT,
                     extension=".txt")
             allure.attach(
-                body=json.dumps(response.headers, indent=4).encode("utf8"),
+                body=json.dumps(dict(response.headers, indent=4)).encode("utf8"),
                 name=f"Response headers {response.status_code}",
                 attachment_type=AttachmentType.JSON,
                 extension=".json"
