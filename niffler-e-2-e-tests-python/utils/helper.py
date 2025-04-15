@@ -4,8 +4,10 @@ import os
 import types
 import datetime
 from utils import resource
+import allure
 
 
+@allure.step('DB: check category in db')
 def check_category_in_db(spend_db, category_id: str, expected_name: str, expected_username: str,
                          expected_archived: bool):
     category = spend_db.get_user_category(category_id)
@@ -16,6 +18,7 @@ def check_category_in_db(spend_db, category_id: str, expected_name: str, expecte
     assert category.archived == expected_archived
 
 
+@allure.step('DB: check spend in db')
 def check_spend_in_db(spend_db, amount: float, category_name: str, description: str, username: str):
     result = spend_db.get_user_spends(username)
 
@@ -28,6 +31,7 @@ def check_spend_in_db(spend_db, amount: float, category_name: str, description: 
         assert category_name == category_sql_obj.name
 
 
+@allure.step('DB: check category name in db')
 def check_category_name_in_db(spend_db, username: str, target_name: str):
     spends = spend_db.get_user_categories(username)
     categories = []

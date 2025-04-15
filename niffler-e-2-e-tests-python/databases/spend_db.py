@@ -6,15 +6,15 @@ import allure
 from allure_commons.types import AttachmentType
 
 from models.spend import SpendSQL
-
+from models.config import Envs
 from utils.helper import step
 
 
 class SpendDb:
     engine: Engine
 
-    def __init__(self, db_url: str):
-        self.engine = create_engine(db_url)
+    def __init__(self, envs: Envs):
+        self.engine = create_engine(envs.spend_db_url)
         event.listen(self.engine, "do_execute", fn=self.attach_sql)
 
     @staticmethod

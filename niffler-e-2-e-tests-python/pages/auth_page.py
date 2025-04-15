@@ -3,6 +3,7 @@ from selene import browser, have
 from utils.helper import step
 import allure
 
+
 class AuthPage(BasePage):
 
     def __init__(self):
