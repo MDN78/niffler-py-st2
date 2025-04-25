@@ -39,7 +39,7 @@ class CategoryPage(BasePage):
 
     # @step
     @allure.step('UI: create category')
-    def create_category(self, category_name: str):
+    def create_category(self, category_name: str) -> None:
         self.field_category.type(category_name).press_enter()
 
     # @step

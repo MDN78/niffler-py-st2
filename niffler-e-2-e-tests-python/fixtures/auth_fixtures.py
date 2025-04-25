@@ -18,7 +18,7 @@ def auth(envs: Envs) -> str:
 
 
 @pytest.fixture(scope="session")
-def auth_api_token(envs: Envs):
+def auth_api_token(envs: Envs) -> str:
     token = AuthClient(envs).auth(envs.test_username, envs.test_password)
     allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)
     return token
