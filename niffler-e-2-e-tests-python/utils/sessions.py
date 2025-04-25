@@ -2,7 +2,6 @@ import requests
 from urllib.parse import parse_qs, urlparse
 from utils.allure_helper import allure_attach_request
 from requests import Session
-# from utils.helper import step
 
 
 def raise_for_status(function):
@@ -42,7 +41,6 @@ class AuthSession(Session):
         self.base_url = kwargs.pop("base_url", "")
         self.code = None
 
-    # @step
     @raise_for_status
     @allure_attach_request
     def request(self, method, url, **kwargs):
