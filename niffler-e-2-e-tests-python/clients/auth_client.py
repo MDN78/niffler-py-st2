@@ -68,3 +68,24 @@ class AuthClient:
 
         self.token = token_response.json().get("access_token", None)
         return self.token
+
+    def register(self, username: str, password: str):
+        self.session.get(
+            url="/register",
+            params={
+                "redirect_uri": "http://auth.niffler.dc:9000/register",
+            },
+            allow_redirects=True
+        )
+
+        result = self.session.post(
+            url="/register",
+            data={
+                "username": username,
+                "password": password,
+                "passwordSubmit": password,
+                "_csrf": self.session.cookies.get("XSRF-TOKEN")
+            },
+            allow_redirects=True
+        )
+        return result
