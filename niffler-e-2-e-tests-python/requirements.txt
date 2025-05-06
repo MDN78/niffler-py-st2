@@ -22,3 +22,4 @@ pytest-cov
 grpcio-tools==1.69.0
 
 confluent-kafka==2.10.0
+retry==0.9.2

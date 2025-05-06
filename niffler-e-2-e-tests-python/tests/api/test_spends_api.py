@@ -68,7 +68,7 @@ def test_add_spend_with_minimal_amount(spends_client: SpendsHttpClient, spend_db
     spend_db.delete_category(new_spend.category.id)
 
 
-def test_remove12345QA2025_spend(spends_client: SpendsHttpClient, spend_db: SpendDb):
+def test_remove_spend(spends_client: SpendsHttpClient, spend_db: SpendDb):
     data = SpendAdd(
         amount=10500,
         description="QA.GURU Python Advanced 2",
