@@ -14,3 +14,10 @@ pytest
 ### Работаем с реляционными базами данных из тестов  
 
 ### New branch and project
+
+
+start pytest coverage:
+```commandline
+pytest --cov=tests
+
+```

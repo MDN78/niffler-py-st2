@@ -1,6 +1,5 @@
 from pages.base_page import BasePage
 from selene import browser, have
-from utils.helper import step
 import allure
 
 
@@ -17,38 +16,32 @@ class AuthPage(BasePage):
         self.successful_registration = browser.element('.form__paragraph')
         self.unsuccessful_registration = browser.element('.form__error')
 
-    @step
     @allure.step('UI: open registration page')
-    def open_registration_page(self, url: str):
+    def open_registration_page(self, url: str) -> None:
         browser.open(f'{url}/login')
 
-    @step
     @allure.step('UI: check title')
-    def spending_title_exists(self, title: str):
+    def spending_title_exists(self, title: str) -> None:
         self.spending_title.should(have.text(title))
 
-    @step
     @allure.step('UI: check bottom title')
-    def spending_bottom_title_exists(self, title: str):
+    def spending_bottom_title_exists(self, title: str) -> None:
         self.spending_bottom_title.should(have.text(title))
 
-    @step
     @allure.step('UI: registration user')
-    def registration_user(self, username: str, password: str):
+    def registration_user(self, username: str, password: str) -> None:
         self.register_form.click()
         self.username.set_value(username)
         self.password.set_value(password)
         self.submit_password_field.set_value(password)
         self.submit_button.click()
 
-    @step
     @allure.step('UI: check text')
-    def text_should_be_visible(self, text: str):
+    def text_should_be_visible(self, text: str) -> None:
         self.successful_registration.should(have.text(text))
 
-    @step
     @allure.step('UI: unsuccessful registration')
-    def text_unsuccessful_registration(self, text: str):
+    def text_unsuccessful_registration(self, text: str) -> None:
         self.unsuccessful_registration.should(have.text(text))
 
 

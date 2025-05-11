@@ -1,7 +1,6 @@
 from pages.base_page import BasePage
 from selene import browser, have, be
 from selenium.webdriver.common.keys import Keys
-from utils.helper import step
 import allure
 
 
@@ -25,7 +24,6 @@ class CategoryPage(BasePage):
             have.text(name))
         self.field_category = browser.element('[id="category"]')
 
-    @step
     @allure.step('UI: check text')
     def category_should_be_exist(self, name_category: str) -> None:
         self.person_icon.click()
@@ -37,30 +35,25 @@ class CategoryPage(BasePage):
     def refresh_page() -> None:
         browser.driver.refresh()
 
-    @step
     @allure.step('UI: create category')
-    def create_category(self, category_name: str):
+    def create_category(self, category_name: str) -> None:
         self.field_category.type(category_name).press_enter()
 
-    @step
     @allure.step('UI: edit category name')
     def edit_category_name(self, old_name: str, new_name: str) -> None:
         self.category_name(old_name).should(be.present).click()
         self.category_input(old_name).clear().should(be.blank).type(new_name)
         self.category_input(new_name).send_keys(Keys.ENTER)
 
-    @step
     @allure.step('UI: archive category')
     def archive_category(self, category_name: str) -> None:
         self.parent_element.element_by(have.text(category_name)).element(self.archive_button).click()
         self.confirm_archive.click()
 
-    @step
     @allure.step('UI: check category name')
     def should_be_category_name(self, name: str) -> None:
         self.category_name(name).should(be.present)
 
-    @step
     @allure.step('UI: check archived category')
     def check_archived_category(self, name: str) -> None:
         self.archived_button.click()
