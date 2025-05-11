@@ -2,7 +2,7 @@
 
 ### Особенности фреймворка:  
 <p  align="center">
-  <code><img width="75%" title="mainpage" src=".assets/main_page.png"></code>
+  <code><img width="75%" title="main_page" src="/assets/main_page.PNG"></code>
 </p>
 
 ### Предустановка
