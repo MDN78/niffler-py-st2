@@ -2,8 +2,10 @@
 
 ### Особенности фреймворка:  
 <p  align="center">
-  <code><img width="75%" title="main_page" src="niffler-e-2-e-tests-python/assets/main_page.PNG"></code>
+<code><img width="75%" title="main_page" src="assets/main_page.PNG"></code>
 </p>
+
+[main page]("assets/main_page.PNG")
 
 ### Предустановка
 - Запустить Docker локально на компьютере
