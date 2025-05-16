@@ -16,7 +16,7 @@ def main_page(auth: str, envs: Envs):
     browser.open(envs.frontend_url)
 
 
-# добавление авторизации в браузер
+# добавление авторизации в браузер пример реальзиции
 # @pytest.fixture()
 # def main_page(auth_api_token: str, envs: Envs):
 #     # Необязательная часть

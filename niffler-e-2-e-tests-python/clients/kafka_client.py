@@ -1,11 +1,11 @@
+import json
 import logging
-from typing import Sequence
 
 from confluent_kafka import TopicPartition
 from confluent_kafka.admin import AdminClient
 from confluent_kafka.cimpl import NewTopic, Consumer, Producer
-
 from utils.waiters import wait_until_timeout
+
 
 class KafkaClient:
     """Класс для взаимодействия с кафкой"""
@@ -19,10 +19,10 @@ class KafkaClient:
     ):
         self.server = envs.kafka_address
         self.admin = AdminClient(
-            {"bootstrap.servers": f"{self.server}:9092"}
+            {"bootstrap.servers": f"{self.server}:9093"}
         )
         self.producer = Producer(
-            {"bootstrap.servers": f"{self.server}:9092"}
+            {"bootstrap.servers": f"{self.server}:9093"}
         )
         self.consumer = Consumer(
             {
@@ -82,3 +82,29 @@ class KafkaClient:
         logging.info(f'{topic} offsets: {partitions_offsets_event}')
         topic_partitions = [TopicPartition(topic, k, v) for k, v in partitions_offsets_event.items()]
         return topic_partitions
+
+    @staticmethod
+    def delivery_report(err, msg):
+        """Kafka delivery callback"""
+        if err is not None:
+            logging.info(f"Message delivery failed: {err}")
+            print(f"Message delivery failed: {err}")
+        else:
+            logging.info(
+                f"Message delivered to '{msg.topic()}'"
+                f"[partition {msg.partition()}]"
+                f"Offset {msg.offset()}")
+            print(
+                f"Message delivered to '{msg.topic()}'",
+                f"Partition [{msg.partition()}]",
+                f"Offset {msg.offset()}"
+            )
+
+    def sent_event(self, topic: str, username: str):
+        self.producer.produce(
+            topic,
+            json.dumps({"username": str(username)}).encode("utf-8"),
+            on_delivery=self.delivery_report,
+            headers={"__TypeId__": "guru.qa.niffler.model.UserJson"},
+        )
+        self.producer.flush()
