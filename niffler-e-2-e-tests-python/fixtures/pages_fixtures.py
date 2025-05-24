@@ -3,15 +3,17 @@ from selene import browser
 from models.config import Envs
 from urllib.parse import urljoin
 # from selenium.webdriver.chrome.options import Options
-
+import allure
 
 @pytest.fixture()
+@allure.title("Open profile page")
 def profile_page(envs: Envs, auth: str):
     profile_url = urljoin(envs.frontend_url, "/profile")
     browser.open(profile_url)
 
 
 @pytest.fixture()
+@allure.title("Open main page")
 def main_page(auth: str, envs: Envs):
     browser.open(envs.frontend_url)
 

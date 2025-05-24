@@ -6,6 +6,8 @@ from models.category import Category, CategoryAdd
 
 
 class CategoryHttpClient:
+    """Класс для взаимодействия с микросервисом niffler spend, category"""
+
     session: requests.Session
     base_url: str
 

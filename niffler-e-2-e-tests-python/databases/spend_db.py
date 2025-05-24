@@ -4,12 +4,13 @@ from sqlmodel import Session, select
 from models.category import Category
 import allure
 from allure_commons.types import AttachmentType
-
 from models.spend import SpendSQL
 from models.config import Envs
 
 
 class SpendDb:
+    """Класс для взаимодействия с БД niffler-spend"""
+
     engine: Engine
 
     def __init__(self, envs: Envs):

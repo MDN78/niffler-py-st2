@@ -7,6 +7,7 @@ from clients.auth_client import AuthClient
 
 
 @pytest.fixture(scope='session')
+@allure.title("Get token via UI")
 def auth(envs: Envs) -> str:
     browser.open(envs.frontend_url)
     browser.element('input[name=username]').set_value(envs.test_username)
@@ -18,6 +19,7 @@ def auth(envs: Envs) -> str:
 
 
 @pytest.fixture(scope="session")
+@allure.title("Get token via auth session")
 def auth_api_token(envs: Envs) -> str:
     token = AuthClient(envs).auth(envs.test_username, envs.test_password)
     allure.attach(token, name="token.txt", attachment_type=AttachmentType.TEXT)

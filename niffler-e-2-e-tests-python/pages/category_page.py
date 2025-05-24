@@ -5,6 +5,7 @@ import allure
 
 
 class CategoryPage(BasePage):
+    """Класс взаимодействия с UI страницей категории"""
 
     def __init__(self):
         self.person_icon = browser.element('[data-testid="PersonIcon"]')

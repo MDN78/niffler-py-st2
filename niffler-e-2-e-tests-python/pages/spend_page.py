@@ -4,6 +4,8 @@ import allure
 
 
 class SpendPage(BasePage):
+    """Класс взаимодействия с UI страницей spends"""
+
     def __init__(self):
         self.new_spend_button = browser.element('//a[.="New spending"]')
         self.title_new_spending_list = browser.element('.MuiTypography-root.MuiTypography-h5.css-w1t7b3')

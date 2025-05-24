@@ -1,6 +1,5 @@
 # import base64
 import pkce
-
 from models.config import Envs
 from utils.sessions import AuthSession
 from models.oauth import OAuthRequest
@@ -8,6 +7,7 @@ from models.oauth import OAuthRequest
 
 class AuthClient:
     """Авторизует по Oauth2.0"""
+
     session: AuthSession
     base_url: str
 
