@@ -6,6 +6,8 @@ from models.spend import SpendAdd, Spend
 
 
 class SpendsHttpClient:
+    """Класс для взаимодействия с микросервисом niffler spend"""
+
     session: requests.Session
     base_url: str
 

@@ -4,6 +4,7 @@ import allure
 
 
 class AuthPage(BasePage):
+    """Класс взаимодействия с UI страницей регистрации"""
 
     def __init__(self):
         self.spending_title = browser.element('[id="spendings"]')

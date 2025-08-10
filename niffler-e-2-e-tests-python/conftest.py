@@ -61,7 +61,9 @@ def envs() -> Envs:
         spend_db_url=os.getenv("SPEND_DB_URL"),
         test_username=os.getenv("TEST_USERNAME"),
         test_password=os.getenv("TEST_PASSWORD"),
-        kafka_address=os.getenv("KAFKA_ADDRESS")
+        kafka_address=os.getenv("KAFKA_ADDRESS"),
+        userdata_db_url=os.getenv("USERDATA_DB_URL"),
+        auth_db_url=os.getenv("AUTH_DB_URL"),
     )
     allure.attach(envs_instance.model_dump_json(indent=2), name="envs.json", attachment_type=AttachmentType.JSON)
     return envs_instance
